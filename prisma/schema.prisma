@@ -1,0 +1,177 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  image    String?
+
+  sessions Session[]
+  accounts Account[]
+
+  createdAt          DateTime             @default(now())
+  updateAt           DateTime             @updatedAt
+  Expences           Expences[]
+  Upcomming_Expences Upcomming_Expences[]
+  Salary             Salary[]
+  Budget             Budget[]
+  category           category[]
+  Bank               Bank[]
+}
+
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model leads {
+  id            Int      @id @default(autoincrement())
+  firstName     String
+  surname       String
+  email         String
+  mobileNo      String
+  company       String
+  country       String
+  productFamily String
+  productName   String
+  requestType   String
+  message       String
+  createAt      DateTime @default(now())
+  updateAt      DateTime @updatedAt
+}
+
+model jobs {
+  id               Int    @id @default(autoincrement())
+  title            String
+  responsibilities String
+  jobType          String
+  qualification    String
+  experience       String
+  salaryRange      String
+  requiredSkills   String
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model Expences {
+  id           Int       @id @default(autoincrement())
+  subject      String
+  category     String
+  categoryData category  @relation(fields: [category], references: [id])
+  amount       Int
+  bankType     String
+  bankData     Bank      @relation(fields: [bankType], references: [id])
+  userId       String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  paymentDate  DateTime? @db.Timestamptz(6)
+  user         User      @relation(fields: [userId], references: [id])
+}
+
+model Upcomming_Expences {
+  id           Int       @id @default(autoincrement())
+  subject      String
+  category     String
+  categoryData category  @relation(fields: [category], references: [id], onDelete: Cascade)
+  amount       Int
+  bankType     String
+  bankData     Bank      @relation(fields: [bankType], references: [id])
+  userId       String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  paymentDate  DateTime? @db.Timestamptz(6)
+  user         User      @relation(fields: [userId], references: [id])
+  status       String    @default("pending")
+}
+
+model Salary {
+  id         Int      @id @default(autoincrement())
+  amount     Int
+  salaryDate DateTime
+  expence    Int      @default(0)
+  remaining  Int      @default(0)
+  bankType   String
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Budget {
+  id       Int      @id @default(autoincrement())
+  title    String
+  limit    Int
+  userId   String
+  category category @relation(fields: [title], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+model category {
+  id                 Int                  @id @default(autoincrement())
+  title              String
+  userId             String
+  user               User                 @relation(fields: [userId], references: [id])
+  Budget             Budget[]
+  Expences           Expences[]
+  upcomming_expences Upcomming_Expences[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt
+}
+
+model Bank {
+  id                 Int                  @id @default(autoincrement())
+  title              String
+  userId             String
+  user               User                 @relation(fields: [userId], references: [id])
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt
+  Expences           Expences[]
+  Upcomming_Expences Upcomming_Expences[]
+}
