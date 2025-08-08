@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
 const DataLoader = () => {
-    return (
-        <div className="flex justify-center items-center h-full bg-muted/50">
-            <div className="dataLoader rounded-sm"></div>
-        </div>
-    )
-}
+  return (
+    <div className="flex justify-center items-center h-full">
+      <div className="dataLoader rounded-sm"></div>
+    </div>
+  );
+};
 
-export default DataLoader
+export default DataLoader;

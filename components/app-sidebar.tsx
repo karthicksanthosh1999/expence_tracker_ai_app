@@ -111,11 +111,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
           {
             title: "Banks",
-            url: "#",
+            url: "/admin/settings/bank",
           },
           {
             title: "Category",
-            url: "#",
+            url: "/admin/settings/category",
           },
           {
             title: "Limits",

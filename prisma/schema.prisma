@@ -28,7 +28,6 @@ model User {
   updateAt           DateTime             @updatedAt
   Expences           Expences[]
   Upcomming_Expences Upcomming_Expences[]
-  Salary             Salary[]
   Budget             Budget[]
   category           category[]
   Bank               Bank[]
@@ -103,27 +102,27 @@ model jobs {
 model Expences {
   id           Int       @id @default(autoincrement())
   subject      String
-  category     String
+  category     Int
   categoryData category  @relation(fields: [category], references: [id])
   amount       Int
-  bankType     String
+  bankType     Int
   bankData     Bank      @relation(fields: [bankType], references: [id])
-  userId       String
+  userId       Int
+  user         User      @relation(fields: [userId], references: [id])
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   paymentDate  DateTime? @db.Timestamptz(6)
-  user         User      @relation(fields: [userId], references: [id])
 }
 
 model Upcomming_Expences {
   id           Int       @id @default(autoincrement())
   subject      String
-  category     String
-  categoryData category  @relation(fields: [category], references: [id], onDelete: Cascade)
+  category     Int
+  categoryData category  @relation(fields: [category], references: [id])
   amount       Int
-  bankType     String
+  bankType     Int
   bankData     Bank      @relation(fields: [bankType], references: [id])
-  userId       String
+  userId       Int
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   paymentDate  DateTime? @db.Timestamptz(6)
@@ -131,24 +130,11 @@ model Upcomming_Expences {
   status       String    @default("pending")
 }
 
-model Salary {
-  id         Int      @id @default(autoincrement())
-  amount     Int
-  salaryDate DateTime
-  expence    Int      @default(0)
-  remaining  Int      @default(0)
-  bankType   String
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
 model Budget {
   id       Int      @id @default(autoincrement())
-  title    String
+  title    Int
   limit    Int
-  userId   String
+  userId   Int
   category category @relation(fields: [title], references: [id])
   user     User     @relation(fields: [userId], references: [id])
 }
@@ -156,7 +142,7 @@ model Budget {
 model category {
   id                 Int                  @id @default(autoincrement())
   title              String
-  userId             String
+  userId             Int
   user               User                 @relation(fields: [userId], references: [id])
   Budget             Budget[]
   Expences           Expences[]
@@ -168,7 +154,7 @@ model category {
 model Bank {
   id                 Int                  @id @default(autoincrement())
   title              String
-  userId             String
+  userId             Int
   user               User                 @relation(fields: [userId], references: [id])
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now()) @updatedAt
