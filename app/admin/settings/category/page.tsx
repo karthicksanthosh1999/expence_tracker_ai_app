@@ -4,12 +4,17 @@ import Dashboard from "../../dashboard/page";
 import CategoryForm from "./components/categoryForm";
 import CategoryHeader from "./components/categoryHeader";
 import CategoryList from "./components/categoryList";
-import { useGetCategory } from "@/app/hooks/useCategory";
+import { useDeleteCategory, useGetCategory } from "@/app/hooks/useCategory";
 import { useForm } from "react-hook-form";
 
 const page = () => {
   const { data: categoryData, isLoading: categoryGetLoading } =
     useGetCategory();
+  const {
+    mutate: categoryDeleteMutation,
+    isPending: categoryDeleteIsLoading,
+    data: categoryDeleteData,
+  } = useDeleteCategory();
 
   return (
     <Dashboard>
@@ -33,7 +38,7 @@ const page = () => {
           />
         </div>
       </div>
-      <div className="w-[70%]"></div>
+      <div className="container mx-auto"></div>
     </Dashboard>
   );
 };
