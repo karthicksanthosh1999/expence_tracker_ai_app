@@ -24,7 +24,7 @@ const SelectInput: FC<SelectInterface> = ({
 }) => {
   return (
     <select
-      className="border-2 w-full cursor-pointer max-w-lg p-2 border-gray-600 rounded-sm "
+      className="border-2 w-full cursor-pointer max-w-lg p-2 rounded-sm"
       onChange={onchange}
       {...props}
       name={name}

@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema } from "@/validation-schema/category-vlidation-schema";
 import { ICategory } from "@/@types/categoryTypes";
+import { Separator } from "@/components/ui/separator";
 
 const CategoryForm = () => {
   const {
@@ -39,7 +40,9 @@ const CategoryForm = () => {
     },
   ];
 
-  const handelCreateCategory = (data: ICategory) => {};
+  const handelCreateCategory = (data: ICategory) => {
+    console.log(data);
+  };
 
   return (
     <Card>
@@ -48,10 +51,10 @@ const CategoryForm = () => {
           <CardTitle>Add Category</CardTitle>
           <CardDescription>Add the cateogry form</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-5 py-3">
           <div className="space-y-3">
             <Label>Title : </Label>
-            <Input placeholder="Enter the title" {...register()} />
+            <Input placeholder="Enter the title" {...register("title")} />
           </div>
           <div className="space-y-3">
             <Label>Type : </Label>
@@ -69,14 +72,18 @@ const CategoryForm = () => {
             />
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="mt-3">
           <CardAction className="space-y-3 w-full">
-            <Button size={"sm"} className="cursor-pointer w-full bg-primary">
+            <Button
+              type="submit"
+              size={"sm"}
+              className="cursor-pointer w-full bg-primary">
               Create Category
             </Button>
             <Button
+              type="reset"
               size={"sm"}
-              className="cursor-pointer w-full "
+              className="cursor-pointer w-full"
               variant={"destructive"}>
               Reset
             </Button>
