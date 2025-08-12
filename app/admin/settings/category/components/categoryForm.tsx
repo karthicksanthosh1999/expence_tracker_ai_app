@@ -11,14 +11,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SelectInput, { Toption } from "@/components/ui/SelectInput";
-import React from "react";
+import React, { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema } from "@/validation-schema/category-vlidation-schema";
 import { ICategory } from "@/@types/categoryTypes";
-import { Separator } from "@/components/ui/separator";
 
-const CategoryForm = () => {
+type TCategoryFormProps = {
+  userId: string;
+  handleCreateCategoryFunciton: (data: ICategory) => void;
+};
+
+const CategoryForm: FC<TCategoryFormProps> = ({
+  handleCreateCategoryFunciton,
+  userId,
+}) => {
   const {
     reset,
     register,
@@ -41,7 +48,11 @@ const CategoryForm = () => {
   ];
 
   const handelCreateCategory = (data: ICategory) => {
-    console.log(data);
+    if (userId) {
+      handleCreateCategoryFunciton({ ...data, userId });
+      console.log({ ...data, userId });
+      reset();
+    }
   };
 
   return (

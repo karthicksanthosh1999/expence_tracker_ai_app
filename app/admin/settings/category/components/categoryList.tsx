@@ -2,14 +2,13 @@ import { ICategory } from "@/@types/categoryTypes";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import DataLoader from "@/components/ui/dataLoader";
+import { Edit, Trash } from "lucide-react";
 import React, { FC } from "react";
 
 type TCategoryListType = {
@@ -17,6 +16,9 @@ type TCategoryListType = {
   description: string;
   categoryList: ICategory[];
   loading: boolean;
+  deleteModelClose: () => void;
+  selectedId: string;
+  setSelectedId: (id: string) => void;
 };
 
 const CategoryList: FC<TCategoryListType> = ({
@@ -24,7 +26,13 @@ const CategoryList: FC<TCategoryListType> = ({
   title,
   categoryList,
   loading,
+  deleteModelClose,
+  setSelectedId,
 }) => {
+  const handleIdSelect = (id) => {
+    setSelectedId(id);
+    deleteModelClose();
+  };
   return (
     <Card>
       <CardHeader>
@@ -38,9 +46,27 @@ const CategoryList: FC<TCategoryListType> = ({
       ) : categoryList.length > 0 ? (
         categoryList &&
         categoryList?.map((item, idx) => (
-          <CardContent className="h-[300px]">
-            <div key={idx}>{item.title ?? "N/A"}</div>
-          </CardContent>
+          <div key={idx} className="space-y-2">
+            <div className="flex items-center justify-between px-5">
+              <p>{item.title ?? "N/A"}</p>
+              <div className="space-x-2">
+                <Button
+                  className="cursor-pointer"
+                  type="button"
+                  variant={"outline"}
+                  onClick={() => handleIdSelect(item?.id)}>
+                  <Trash />
+                </Button>
+                <Button
+                  className="cursor-pointer"
+                  type="button"
+                  variant={"outline"}>
+                  <Edit />
+                </Button>
+              </div>
+            </div>
+            <hr className="" />
+          </div>
         ))
       ) : (
         <CardContent className="h-[300px] flex items-center justify-center">

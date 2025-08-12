@@ -1,14 +1,14 @@
 import axiosInstance from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ICategory,
-  ICategoryResponse,
-  TSingleExpencesResponseType,
-} from "@/@types/expencesTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ICategory, ICategoryResponse } from "@/@types/expencesTypes";
 import { TSingleCategoryResponseType } from "@/@types/categoryTypes";
 
-export const fetchCategory = async (): Promise<ICategoryResponse> => {
-  const { data } = await axiosInstance.get("/api/category");
+export const filterCategory = async (
+  categoryType?: string
+): Promise<ICategoryResponse> => {
+  const { data } = await axiosInstance.get(
+    `/api/category?categoryType=${categoryType ?? ""}`
+  );
   return data;
 };
 
@@ -40,9 +40,11 @@ const updateCategory = async ({
 // HOOKS
 
 export const useGetCategory = () => {
-  return useQuery({
-    queryKey: ["category"],
-    queryFn: fetchCategory,
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: filterCategory,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["category"] }),
+    onError: (err) => console.log(err),
   });
 };
 
