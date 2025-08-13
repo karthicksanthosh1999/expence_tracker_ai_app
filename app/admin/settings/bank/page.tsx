@@ -4,11 +4,9 @@ import Dashboard from "../../dashboard/page";
 import BankHeader from "./components/bankHeader";
 import BankList from "./components/bankList";
 import AddbankModel from "./components/AddbankModel";
-import { boolean } from "zod";
 import { useCreateBank, useFetchBank, useGetBank } from "@/app/hooks/useBank";
 import { useSession } from "next-auth/react";
-import BankDetailsMode from "./components/bankDetailsMode";
-import { IBank } from "@/@types/bankTypes";
+import BankDetailsModel from "./components/bankDetailsModel";
 
 const page = () => {
   const { data } = useSession();
@@ -19,8 +17,11 @@ const page = () => {
 
   const { mutate: createBankMutation } = useCreateBank();
   const { data: getBankData, isLoading: getBankLoading } = useGetBank();
-  const { data: getSingleBankData, mutate: getSingleBankMutation } =
-    useFetchBank();
+  const {
+    data: getSingleBankData,
+    mutate: getSingleBankMutation,
+    isPending: getSingleBankIsLoading,
+  } = useFetchBank();
 
   const handleSearch = (searchInput: string) => {
     setSearch(searchInput);
@@ -52,11 +53,12 @@ const page = () => {
         userId={data?.user?.id ?? ""}
       />
 
-      <BankDetailsMode
+      <BankDetailsModel
         bankData={getSingleBankData?.response}
         modelClose={handleDeleteModel}
         modelOpen={deleteModel}
         getSingleBankFunction={getSingleBankMutation}
+        isLoading={getSingleBankIsLoading}
       />
     </Dashboard>
   );

@@ -6,11 +6,11 @@ const PRISMA = new PrismaClient();
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) => {
   try {
     const singleBank = await PRISMA.bank.findUnique({
-      where: { id: params.id },
+      where: { id: Number(params.id) },
       include: { user: true },
     });
 
@@ -36,7 +36,7 @@ export const GET = async (
 
 export const PUT = async (
   req: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) => {
   const { title, userId } = await req.json();
   try {
@@ -44,7 +44,7 @@ export const PUT = async (
       return routeHandlerFunction("Id is required!");
     }
     const bank = await PRISMA.bank.update({
-      where: { id: params.id },
+      where: { id: Number(params.id) },
       data: { title, userId },
     });
     return NextResponse.json(
@@ -67,14 +67,14 @@ export const PUT = async (
 
 export const DELETE = async (
   req: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) => {
   try {
     if (!params.id) {
       return routeHandlerFunction("Id is required!");
     }
     const bank = await PRISMA.bank.delete({
-      where: { id: params.id },
+      where: { id: Number(params.id) },
     });
     if (!bank) {
       return routeHandlerFunction("Bank is not found");
