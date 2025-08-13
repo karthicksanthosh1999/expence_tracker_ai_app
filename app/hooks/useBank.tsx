@@ -1,29 +1,27 @@
 import axiosInstance from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IBank, upcommingSingleBankResponseType } from "@/@types/bankTypes";
+import {
+  IBank,
+  IBankResponseType,
+  ISingleBankResponseType,
+} from "@/@types/bankTypes";
 
-const fetchBank = async () => {
+const fetchBank = async (): Promise<ISingleBankResponseType> => {
   const { data } = await axiosInstance.get("/api/bank");
-  return data?.response;
+  return data;
 };
 
-const createBank = async (
-  bank: IBank
-): Promise<upcommingSingleBankResponseType> => {
+const createBank = async (bank: IBank): Promise<IBankResponseType> => {
   const { data } = await axiosInstance.post("/api/bank", bank);
   return data;
 };
 
-const deleteBank = async (
-  id: string
-): Promise<upcommingSingleBankResponseType> => {
+const deleteBank = async (id: string): Promise<IBankResponseType> => {
   const { data } = await axiosInstance.delete(`/api/bank/${id}`);
   return data;
 };
 
-const fetchSingleBank = async (
-  id: string
-): Promise<upcommingSingleBankResponseType> => {
+const fetchSingleBank = async (id: string): Promise<IBankResponseType> => {
   const { data } = await axiosInstance.get(`/api/bank/${id}`);
   return data;
 };
@@ -31,7 +29,7 @@ const fetchSingleBank = async (
 const updateBank = async ({
   id,
   ...bank
-}: IBank): Promise<upcommingSingleBankResponseType> => {
+}: IBank): Promise<IBankResponseType> => {
   const { data } = await axiosInstance.put(`/api/bank/${id}`);
   return data;
 };

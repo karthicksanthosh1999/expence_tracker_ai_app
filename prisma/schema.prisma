@@ -126,6 +126,9 @@ model category {
 model Bank {
   id                 Int                  @id @default(autoincrement())
   title              String
+  accountNo          String
+  ifcode             String
+  location           String
   userId             Int
   user               User                 @relation(fields: [userId], references: [id])
   createdAt          DateTime             @default(now())
