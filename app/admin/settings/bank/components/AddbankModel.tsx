@@ -34,7 +34,6 @@ const AddbankModel: FC<TAddBankModel> = ({
     reset,
     handleSubmit,
   } = useForm({ resolver: zodResolver(bankSchema) });
-
   const handleFormSubmit = (data: IBank) => {
     console.log({ ...data, userId });
     createBankFunction({ ...data, userId });

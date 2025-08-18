@@ -2,17 +2,17 @@ import React, { FC } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { IBank } from "@/@types/bankTypes";
 import DataLoader from "@/components/ui/dataLoader";
+import { useDeleteBank } from "@/app/hooks/useBank";
+import toast from "react-hot-toast";
 
 type TBankDetailModel = {
-  bankData: IBank;
+  bankData: IBank | null;
   modelOpen: boolean;
   modelClose: () => void;
   isLoading: boolean;
@@ -24,6 +24,15 @@ const BankDetailsModel: FC<TBankDetailModel> = ({
   modelOpen,
   isLoading,
 }) => {
+  const { mutate } = useDeleteBank();
+
+  const handleDelete = () => {
+    if (bankData?.id) {
+      mutate(bankData?.id);
+      modelClose();
+      toast.success("Bank Deleted Successfully");
+    }
+  };
   return (
     <Dialog open={modelOpen} onOpenChange={modelClose}>
       {isLoading ? (
@@ -49,7 +58,7 @@ const BankDetailsModel: FC<TBankDetailModel> = ({
                 onClick={modelClose}>
                 Close
               </Button>
-              <Button type="button" variant={"outline"} onClick={modelClose}>
+              <Button type="button" variant={"outline"} onClick={handleDelete}>
                 Delete
               </Button>
             </DialogFooter>

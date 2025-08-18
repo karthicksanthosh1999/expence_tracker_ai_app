@@ -7,6 +7,7 @@ import AddbankModel from "./components/AddbankModel";
 import { useCreateBank, useFetchBank, useGetBank } from "@/app/hooks/useBank";
 import { useSession } from "next-auth/react";
 import BankDetailsModel from "./components/bankDetailsModel";
+import { IBank } from "@/@types/bankTypes";
 
 const page = () => {
   const { data } = useSession();
@@ -52,12 +53,10 @@ const page = () => {
         createBankFunction={createBankMutation}
         userId={data?.user?.id ?? ""}
       />
-
       <BankDetailsModel
-        bankData={getSingleBankData?.response}
+        bankData={getSingleBankData?.response ?? null}
         modelClose={handleDeleteModel}
         modelOpen={deleteModel}
-        getSingleBankFunction={getSingleBankMutation}
         isLoading={getSingleBankIsLoading}
       />
     </Dashboard>

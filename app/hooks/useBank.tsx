@@ -11,17 +11,19 @@ const fetchBank = async (): Promise<ISingleBankResponseType> => {
   return data;
 };
 
-const createBank = async (bank: IBank): Promise<IBankResponseType> => {
+const createBank = async (bank: IBank): Promise<ISingleBankResponseType> => {
   const { data } = await axiosInstance.post("/api/bank", bank);
   return data;
 };
 
-const deleteBank = async (id: string): Promise<IBankResponseType> => {
+const deleteBank = async (id: string): Promise<ISingleBankResponseType> => {
   const { data } = await axiosInstance.delete(`/api/bank/${id}`);
   return data;
 };
 
-const fetchSingleBank = async (id: string): Promise<IBankResponseType> => {
+const fetchSingleBank = async (
+  id: string
+): Promise<ISingleBankResponseType> => {
   const { data } = await axiosInstance.get(`/api/bank/${id}`);
   return data;
 };

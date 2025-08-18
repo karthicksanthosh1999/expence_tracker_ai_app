@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useState } from "react";
-import ExpencesTable from "./components/ExpencesTable";
 import ExpencesHeader from "./components/ExpencesHeader";
 import { ExpencesModel } from "./components/ExpencesModel";
 import {

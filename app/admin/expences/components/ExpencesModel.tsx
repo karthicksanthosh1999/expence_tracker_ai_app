@@ -1,10 +1,10 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import SelectInput from "@/components/ui/SelectInput";
 import { useCreateExpence } from "@/app/hooks/useExpences";
-import { X } from "lucide-react";
 import { expencesType } from "@/@types/expencesTypes";
 import { useGetCategory } from "@/app/hooks/useCategory";
 import { useGetBank } from "@/app/hooks/useBank";
@@ -28,8 +28,13 @@ export const ExpencesModel: FC<modelOpenType> = ({
   handleModel,
   isModelOpen,
 }) => {
-  const { data: category } = useGetCategory();
+  const { data: category, mutate: getCategoryFunction } = useGetCategory();
   const { data: bank } = useGetBank();
+
+  useEffect(() => {
+    getCategoryFunction({ categoryType: "" });
+  }, []);
+  console.log(category);
 
   const {
     register,
