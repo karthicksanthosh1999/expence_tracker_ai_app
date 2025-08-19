@@ -6,7 +6,7 @@ import {
   ISingleBankResponseType,
 } from "@/@types/bankTypes";
 
-const fetchBank = async (): Promise<ISingleBankResponseType> => {
+const fetchBank = async (): Promise<IBankResponseType> => {
   const { data } = await axiosInstance.get("/api/bank");
   return data;
 };

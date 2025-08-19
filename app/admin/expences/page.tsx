@@ -1,9 +1,8 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ExpencesHeader from "./components/ExpencesHeader";
 import { ExpencesModel } from "./components/ExpencesModel";
 import {
-  useGetAllExpences,
   useGetAllExpencesFilter,
   useSingleExpence,
 } from "@/app/hooks/useExpences";
@@ -18,14 +17,16 @@ const page = () => {
   const [searchTerms, setSearchTerms] = useState<string>("");
   const [filterModel, setFilterModel] = useState<boolean>(false);
 
-  const { data: singleExpence } = useSingleExpence(selectedId);
-
   const {
-    data: expencesMutatoinFunction,
+    mutate: expencesMutatoinFunction,
     isPending: expenceLoading,
     data: expenceData,
   } = useGetAllExpencesFilter();
 
+  const { data: singleExpence } = useSingleExpence();
+  useEffect(() => {
+    expencesMutatoinFunction();
+  }, []);
   const handleModelOpen = () => {
     setIsModelOpen(isModelOpen ? false : true);
   };
@@ -63,7 +64,7 @@ const page = () => {
       <div className="container mx-auto">
         <ExpenceDataTable
           columns={ExpenceColumns}
-          data={expencesMutatoinFunction?.responses ?? []}
+          data={expenceData?.data ?? []}
         />
       </div>
     </Dashboard>

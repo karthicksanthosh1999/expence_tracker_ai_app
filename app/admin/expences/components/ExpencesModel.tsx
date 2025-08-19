@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { FC, useEffect } from "react";
-import SelectInput from "@/components/ui/SelectInput";
+import SelectInput, { Toption } from "@/components/ui/SelectInput";
 import { useCreateExpence } from "@/app/hooks/useExpences";
 import { expencesType } from "@/@types/expencesTypes";
 import { useGetCategory } from "@/app/hooks/useCategory";
@@ -18,6 +18,7 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { useSession } from "next-auth/react";
 
 type modelOpenType = {
   handleModel: () => void;
@@ -31,11 +32,6 @@ export const ExpencesModel: FC<modelOpenType> = ({
   const { data: category, mutate: getCategoryFunction } = useGetCategory();
   const { data: bank } = useGetBank();
 
-  useEffect(() => {
-    getCategoryFunction({ categoryType: "" });
-  }, []);
-  console.log(category);
-
   const {
     register,
     handleSubmit,
@@ -47,11 +43,11 @@ export const ExpencesModel: FC<modelOpenType> = ({
 
   // HOOKS
   const { mutate: createExpenceMutation } = useCreateExpence();
-
+  const { data: userData } = useSession();
   const onSubmit = (data: expencesType) => {
     const mutattionData: expencesType = {
       ...data,
-      userId: "cmb5eq0fc0009vrncusitxwjj",
+      userId: userData?.user?.id,
     };
     createExpenceMutation(mutattionData);
     reset();
@@ -62,7 +58,21 @@ export const ExpencesModel: FC<modelOpenType> = ({
     handleModel();
     reset();
   };
-
+  const bankOptions: Toption[] =
+    bank?.response.map((item) => ({
+      id: Number(item.id ?? ""),
+      name: item.title,
+      value: item.id,
+    })) ?? [];
+  useEffect(() => {
+    getCategoryFunction("");
+  }, []);
+  const categoryOptions: Toption[] =
+    category?.response?.map((item) => ({
+      id: item.id ?? "",
+      name: item.title,
+      value: item.id,
+    })) ?? [];
   return (
     <>
       <Dialog open={isModelOpen} onOpenChange={handleModel}>
@@ -81,8 +91,8 @@ export const ExpencesModel: FC<modelOpenType> = ({
               Category:
             </Label>
             <SelectInput
-              options={category?.response}
               {...register("category")}
+              options={categoryOptions}
               name={"category"}
             />
             {errors.category && (
@@ -100,7 +110,7 @@ export const ExpencesModel: FC<modelOpenType> = ({
             </Label>
             <SelectInput
               {...register("bankType")}
-              options={bank}
+              options={bankOptions}
               name={"bankType"}
             />
             {errors.bankType && (
@@ -127,12 +137,12 @@ export const ExpencesModel: FC<modelOpenType> = ({
                 Create
               </Button>
               <Button
-                type="submit"
+                type="button"
                 variant="destructive"
                 size="sm"
                 onClick={handleClose}
                 className="cursor-pointer">
-                Create
+                Close
               </Button>
             </DialogFooter>
           </form>

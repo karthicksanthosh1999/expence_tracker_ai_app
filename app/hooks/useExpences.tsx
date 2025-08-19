@@ -26,8 +26,8 @@ interface GetExpensesParams {
 }
 
 const fetchExpences = async (): Promise<TExpencesResponseType> => {
-  const { data } = await axiosInstance.get("/api/expences");
-  return data.response;
+  const { data } = await axiosInstance.get("/api/expences/filter");
+  return data;
 };
 
 const createExpences = async (
@@ -114,10 +114,10 @@ export const useDeleteExpence = () => {
   });
 };
 
-export const useGetAllExpences = (params: GetExpensesParams) => {
+export const useGetAllExpences = () => {
   return useQuery({
-    queryKey: ["expence", params],
-    queryFn: () => getOverAllExpences(params),
+    queryKey: ["expence"],
+    queryFn: () => getOverAllExpences(),
   });
 };
 
